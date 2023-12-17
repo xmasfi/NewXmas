@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ApplicationFramework.Application" Version="5.2.0-g" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\NewShore.Common\NewShore.Common.csproj" />
+    <ProjectReference Include="..\NewShore.Domain\NewShore.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Flights\Commands\" />
+  </ItemGroup>
+
+</Project>

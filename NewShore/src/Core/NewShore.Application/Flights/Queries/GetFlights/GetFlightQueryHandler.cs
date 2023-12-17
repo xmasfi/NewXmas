@@ -1,0 +1,128 @@
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using NewShore.Application.Interfaces;
+using MediatR;
+using NewShore.Domain.Entities;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using Asg.Services.ApplicationFramework.Application.Exceptions;
+using NewShore.Common.Constants;
+using NewShore.Application.Events;
+using Microsoft.EntityFrameworkCore;
+
+namespace NewShore.Application.flights.Queries.Getflights
+{
+    public class GetFlightQueryHandler : IRequestHandler<GetFlightQuery, IList<Journey>>
+    {
+        private readonly INewShoreDbContext _dbContext;
+        private readonly INewShoreAIRService _newShoreAIRService;
+        private readonly IMapper _mapper;
+        private readonly IPublisher _mediator;
+
+        private string _origin;
+        private string _destination;
+
+
+        public GetFlightQueryHandler(INewShoreDbContext dbContext, INewShoreAIRService newShoreAIRService, IMapper mapper, IPublisher mediator)
+        {
+            _dbContext = dbContext;
+            _newShoreAIRService = newShoreAIRService;
+            _mediator = mediator;
+            _mapper = mapper;
+        }
+
+        public async Task<IList<Journey>> Handle(GetFlightQuery request, CancellationToken cancellationToken)
+        {
+            var cache = await _dbContext.journeys.Where(x => x.Origin.Equals(request.Origin) && x.Destination.Equals(request.Destination)).ToListAsync();
+            if (cache != null && cache.Any())
+            {
+                return cache;
+            }
+
+            var flights = await  _newShoreAIRService.GetFlights(cancellationToken);
+
+            _origin = request.Origin;
+            _destination = request.Destination;
+
+            var finalFlights = computeJourney(flights, new List<FlightModel>() , request.Origin, request.MaxScales);
+
+            var journeys = new List<Journey>();
+
+            foreach(Journey journey in finalFlights) 
+            {
+                var partialJourney = new Journey
+                {
+                    Origin = request.Origin,
+                    Destination = request.Destination,
+                    Flights = journey.Flights,
+                    Price = journey.Flights.Sum(item => item.Price)
+                };
+
+                journeys.Add(partialJourney);
+            }
+
+            // Evento de sistema para guardar a BD la consulta realizada y que tiene info correcta
+            var updateDB = new UpdateDB(journeys);
+            await _mediator.Publish(updateDB);
+
+
+            if (journeys.Any() != true)
+            {
+                // Send exception not found
+                throw new NotFoundException("Flights", "", $"Flights_{ErrorCodes.NotFound}");
+            }
+
+            return journeys;
+        }
+
+
+        // allFlightsPending  : Contiene la lista de escalas a comprobar si nos llevaran a nuestro destino
+        // allScalesUsed      : Contine la lista de escalas que necesitamos parcialmente para legar a nuestro destino
+
+        // origin             : Origin donde estamos (puede ser el inicial o donde nos ha llevado una escala de avion)
+        // destination        : Destino final (inmutable) 
+        private List<Journey> computeJourney(IList<FlightModel> allFlightsPending, IList<FlightModel> allScalesUsed, string origin, int maxScales)
+        {
+            var airplaneScales = allFlightsPending.Where(x => x.Origin.Equals(origin));
+
+            var journeys = new List<Journey>();
+
+            if (airplaneScales.Any())
+            {
+                foreach (var scale in airplaneScales) 
+                {
+                    var scalesUsed = new List<FlightModel>();
+                    scalesUsed.AddRange(allScalesUsed);
+                    scalesUsed.Add(scale);
+
+                    if (scale.Destination.Equals(_destination))
+                    {
+                        // hemos encontrado el destino, paramos de buscar
+                        var partialJourney = new Journey
+                        {
+                            Origin = _origin,
+                            Destination = _destination,
+                            Flights = _mapper.Map<List<Flight>>(scalesUsed),
+                            Price = scale.Price
+                        };
+
+                        journeys.Add(partialJourney);
+                    }
+                    else
+                    {
+                        // seguimos buscando el destino en el resto de escalas de la lista
+                        // Borrar la escala, pues no nos lleva donde queremos
+                        if (maxScales > 0)
+                        {
+                            journeys.AddRange (computeJourney(allFlightsPending, scalesUsed, scale.Destination,  maxScales - 1));
+                        }
+                    }
+                }
+            }
+
+            return journeys;
+        }
+    }
+}

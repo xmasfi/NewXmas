@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ApplicationFramework.Infrastructure" Version="5.2.0-g" />
+    <PackageReference Include="NewShoreAIR.Api.Client" Version="1.7.0-g" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\NewShore.Application\NewShore.Application.csproj" />
+  </ItemGroup>
+
+</Project>

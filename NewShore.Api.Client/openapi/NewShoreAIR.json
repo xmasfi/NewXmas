@@ -1,0 +1,76 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "NewShoreAIR service",
+    "description": "The NewShoreAIR service allows customers to:    centralize and standardize decision rules and models    Expose decision models as a service to all services and devices in the enterprise    Control permissions, security and ownership    Simplify rule deployment and migration ",
+    "version": "2.12.3"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "variables": {}
+    }
+  ],
+  "paths": {
+    "/flights/{typeid}": {
+      "get": {
+        "tags": [
+          "Application flights"
+        ],
+        "summary": "Return a list flights",
+        "description": "Returns a list of flights ",
+        "operationId": "getFlights",
+        "parameters": [
+          {
+            "name": "typeid",
+            "in": "path",
+            "description": "The model of search 0 -> simple  1 -> complex  2 -> full info",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightRepresentation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+  },
+  "components": {
+    "schemas": {
+      "FlightRepresentation": {
+        "type": "object",
+        "properties": {
+          "DepartureStation": {
+            "type": "string"
+          },
+          "ArrivalStation": {
+            "type": "string"
+          },
+          "FlightCarrier": {
+            "type": "string"
+          },
+          "FlightNumber": {
+            "type": "string"
+          },		  
+          "Price": {
+            "type": "number"          },
+        }
+      },	  
+    }
+  }
+}
