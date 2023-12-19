@@ -66,7 +66,7 @@ namespace NewShore.Api.Extensions.Configuration
                     options.AllowReferencesWithProperties = true;
                     options.PostProcess = document =>
                     {
-                        var prefix = "/api/v" + version.Major;
+                        var prefix = "/v" + version.Major;
                         foreach (var pair in document.Paths.ToArray())
                         {
                             document.Paths.Remove(pair.Key);

@@ -6,7 +6,7 @@ using System;
 
 namespace NewShore.Application.Flights.Queries.GetFlightsWithReturn
 {
-    internal class GetFlightReturnQueryHandlerValidation : AbstractValidator<GetFlightReturnQuery>
+    public class GetFlightReturnQueryHandlerValidation : AbstractValidator<GetFlightReturnQuery>
     {
         public GetFlightReturnQueryHandlerValidation()
         {

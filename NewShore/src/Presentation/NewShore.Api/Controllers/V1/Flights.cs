@@ -10,9 +10,8 @@ using NewShore.Domain.Entities;
 
 namespace NewShore.Api.Controllers.V1
 {
-//    [ApiVersion("1.0")]
-//    [Route("api/v{version:apiVersion}/[controller]")]
-    public class FlightsController : BaseController
+    [ApiVersion("1.0")]
+    public class FlightsController : BaseVersioningController
     {
         private readonly IMapper _mapper;
 
@@ -25,7 +24,7 @@ namespace NewShore.Api.Controllers.V1
         ///     Get flights 
         /// </summary>
         /// <returns>Detail of an flights</returns>
-//        [MapToApiVersion("1.0")]
+        [MapToApiVersion("1.0")]
         [HttpGet]
         public async Task<ActionResult<IList<Journey>>> Get([FromQuery] GetFlights getFlights)
         {
