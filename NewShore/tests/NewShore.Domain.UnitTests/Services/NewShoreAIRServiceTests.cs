@@ -40,12 +40,36 @@ namespace NewShore.Domain.UnitTests.Services
 
 
         [Test]
-        public async Task ShouldCreateKeycloakClientProperly()
+        public async Task ShouldCreateFlightsClientProperly()
         {
             // Arrange
 
             // Act
             var response = await _newShoreAIRService.GetFlights();
+            response = await _newShoreAIRService.GetFlights();
+
+            // Assert
+            _newShoreAIRClientMock.Verify(x => x.GetFlightsAsync(
+                It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Once);
+
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.Count, Is.EqualTo(1));
+            Assert.That(response[0].Destination, Is.EqualTo("MAD"));
+            Assert.That(response[0].Origin, Is.EqualTo("BCN"));
+            Assert.That(response[0].Transport.FlightNumber, Is.EqualTo("AA123"));
+            Assert.That(response[0].Transport.FlightCarrier, Is.EqualTo("ZZZ12"));
+            Assert.That(response[0].Price, Is.EqualTo(10.0));
+
+        }
+
+        [Test]
+        public async Task ShouldCreateFlightsReturnClientProperly()
+        {
+            // Arrange
+
+            // Act
+            var response = await _newShoreAIRService.GetFlightsReturn();
+            response = await _newShoreAIRService.GetFlightsReturn();
 
             // Assert
             _newShoreAIRClientMock.Verify(x => x.GetFlightsAsync(

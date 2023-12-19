@@ -16,7 +16,7 @@ namespace NewShore.Api.Extensions.Configuration
         {
             return services
             // Register here your Infrastructure Services
-                   .AddTransient<INewShoreAIRService, Infrastructure.Services.NewShoreAIRService>()
+                   .AddSingleton<INewShoreAIRService, Infrastructure.Services.NewShoreAIRService>()
                    .AddHttpClientServices(configuration);
         }
     }
