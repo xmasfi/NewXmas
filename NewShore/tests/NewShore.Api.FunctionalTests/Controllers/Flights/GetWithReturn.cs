@@ -15,7 +15,7 @@ namespace NewShore.Api.FunctionalTests.Controllers.Flights
         {
         }
 
-        // curl -X GET "http://localhost:5000/api/flights/getwithreturn?Origin=ds&Destination=ds&MaxScales=5" -H  "accept: application/json"
+        // curl -X GET "http://localhost:5000/api/v2/flights?Origin=we&Destination=we&MaxScales=5" -H  "accept: application/json"
         [Test]
         public async Task GivenId_ReturnsflightsModel()
         {
@@ -23,7 +23,7 @@ namespace NewShore.Api.FunctionalTests.Controllers.Flights
 
 
             //Act
-            var response = await Client.GetAsync($"/{ApiBasePath}/flights/getwithreturn?Origin=OCATA&Destination=BCN&MaxScales=4");
+            var response = await Client.GetAsync($"/{ApiBasePath}/v2/flights?Origin=OCATA&Destination=BCN&MaxScales=4");
 
             //Assert
             response.EnsureSuccessStatusCode();
