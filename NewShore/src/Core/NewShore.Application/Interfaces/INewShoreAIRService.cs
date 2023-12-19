@@ -8,5 +8,6 @@ namespace NewShore.Application.Interfaces
     public interface INewShoreAIRService
     {
         Task<IList<FlightModel>> GetFlights(CancellationToken cancellationToken);
+        Task<IList<FlightModel>> GetFlightsReturn(CancellationToken cancellationToken);
     }
 }

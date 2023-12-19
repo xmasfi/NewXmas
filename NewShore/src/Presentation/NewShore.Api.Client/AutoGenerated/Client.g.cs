@@ -48,22 +48,26 @@ namespace NewShore.Api.Client
         /// <summary>Get an flights</summary>
         /// <returns>Detail of an flights</returns>
         /// <exception cref="FlightsApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(GetFlights getFlights)
+        public System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(string origin, string destination, int maxScales)
         {
-            return GetAsync(getFlights, System.Threading.CancellationToken.None);
+            return GetAsync(origin, destination, maxScales, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>Get an flights</summary>
         /// <returns>Detail of an flights</returns>
         /// <exception cref="FlightsApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(GetFlights getFlights, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(string origin, string destination, int maxScales, System.Threading.CancellationToken cancellationToken)
         {
-            if (getFlights == null)
-                throw new System.ArgumentNullException("getFlights");
+            if (maxScales == null)
+                throw new System.ArgumentNullException("maxScales");
     
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/flights");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/flights?");
+            urlBuilder_.Append(System.Uri.EscapeDataString("Origin") + "=").Append(System.Uri.EscapeDataString(origin != null ? ConvertToString(origin, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("Destination") + "=").Append(System.Uri.EscapeDataString(destination != null ? ConvertToString(destination, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("MaxScales") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxScales, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Length--;
     
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -71,9 +75,6 @@ namespace NewShore.Api.Client
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(getFlights, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
     

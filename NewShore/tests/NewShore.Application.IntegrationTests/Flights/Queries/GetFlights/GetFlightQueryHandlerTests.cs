@@ -197,6 +197,12 @@ namespace NewShore.Application.IntegrationTests.Flights.Queries.GetFlights
             Assert.That(response[0].Origin, Is.EqualTo("BCN"));
             Assert.That(response[0].Destination, Is.EqualTo("MAD"));
             Assert.That(response[0].Price, Is.EqualTo(3.0));
+
+            Assert.That(response[0].Flights[0].Origin, Is.EqualTo("BCN"));
+            Assert.That(response[0].Flights[0].Destination, Is.EqualTo("GIRONA"));
+            Assert.That(response[0].Flights[1].Origin, Is.EqualTo("GIRONA"));
+            Assert.That(response[0].Flights[1].Destination, Is.EqualTo("MAD"));
+
         }
 
 
@@ -349,8 +355,18 @@ namespace NewShore.Application.IntegrationTests.Flights.Queries.GetFlights
                 }
             };
 
+            var journey3 = new Journey()
+            {
+                Destination = "pipo",
+                Origin = "pupa",
+                Price = 40.4,
+                Id = new System.Guid(),
+                Flights = new List<Flight>()
+            };
+
             await _dbContext.journeys.AddAsync(journey1);
             await _dbContext.journeys.AddAsync(journey2);
+            await _dbContext.journeys.AddAsync(journey3);
             await _dbContext.SaveChangesAsync();
 
             // Act

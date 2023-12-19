@@ -10,17 +10,10 @@ namespace NewShore.Api.FunctionalTests.Controllers.flights
 {
     public class Get : FunctionalTestBase
     {
-        private GetFlights _getFlightsModel;
 
         [SetUp]
         public void Setup()
         {
-            _getFlightsModel = new GetFlights
-            {
-                Origin = "BCN",
-                Destination = "MAD",
-                MaxScales = 5
-            };
         }
 
         // curl -X GET "http://localhost:5000/api/flights?Origin=ooo&Destination=dddd&MaxScales=5" -H  "accept: application/json"

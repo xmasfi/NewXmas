@@ -25,6 +25,26 @@ namespace NewShore.Api.FunctionalTests.Builders
                     }
                 });
 
+            _newShoreAIRServiceMock
+                .Setup(x => x.GetFlightsReturn(CancellationToken.None))
+                .ReturnsAsync(new List<FlightModel>()
+                {
+                    new FlightModel()
+                    {
+                        Origin = "OCATA",
+                        Destination = "BCN",
+                        Price = 1.1,
+                        Transport = new Domain.ValueObjects.Transport("renfe", "cercanias")
+                    },
+                    new FlightModel()
+                    {
+                        Origin = "BCN",
+                        Destination = "OCATA",
+                        Price = 1.1,
+                        Transport = new Domain.ValueObjects.Transport("renfe", "cercanias")
+                    }
+                });
+
             return this;
         }
             public INewShoreAIRService Build()

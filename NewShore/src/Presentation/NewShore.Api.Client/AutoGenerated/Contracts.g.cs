@@ -21,13 +21,13 @@ namespace NewShore.Api.Client.Contracts
         /// <summary>Get an flights</summary>
         /// <returns>Detail of an flights</returns>
         /// <exception cref="FlightsApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(GetFlights getFlights);
+        System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(string origin, string destination, int maxScales);
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>Get an flights</summary>
         /// <returns>Detail of an flights</returns>
         /// <exception cref="FlightsApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(GetFlights getFlights, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.IList<Journey>> GetAsync(string origin, string destination, int maxScales, System.Threading.CancellationToken cancellationToken);
     
     }
 
@@ -105,25 +105,6 @@ namespace NewShore.Api.Client.Contracts
     
         [Newtonsoft.Json.JsonProperty("correlationId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CorrelationId { get; set; }
-    
-    
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.9.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class GetFlights 
-    {
-        [Newtonsoft.Json.JsonProperty("origin", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(50, MinimumLength = 2)]
-        public string Origin { get; set; }
-    
-        [Newtonsoft.Json.JsonProperty("destination", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(50, MinimumLength = 2)]
-        public string Destination { get; set; }
-    
-        [Newtonsoft.Json.JsonProperty("maxScales", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MaxScales { get; set; }
     
     
     }

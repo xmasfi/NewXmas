@@ -14,6 +14,7 @@ namespace NewShore.Infrastructure.Services
         private readonly INewShoreAIRClient _newShoreAIRClient;
         private readonly IMapper _mapper;
         private const int difficult = 1;
+        private const int difficultReturn = 2;
 
 
         public NewShoreAIRService(INewShoreAIRClient newShoreAIRClient, IMapper mapper)
@@ -26,6 +27,12 @@ namespace NewShore.Infrastructure.Services
         public async Task<IList<FlightModel>> GetFlights(CancellationToken cancellationToken = default)
         {
             var flights = await _newShoreAIRClient.GetFlightsAsync(difficult, cancellationToken);
+
+            return _mapper.Map<List<FlightModel>>(flights);
+        }
+        public async Task<IList<FlightModel>> GetFlightsReturn(CancellationToken cancellationToken = default)
+        {
+            var flights = await _newShoreAIRClient.GetFlightsAsync(difficultReturn, cancellationToken);
 
             return _mapper.Map<List<FlightModel>>(flights);
         }

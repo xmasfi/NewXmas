@@ -1,12 +1,11 @@
 ﻿using Asg.Services.ApplicationFramework.Application.AutoMapper.Interfaces;
 using Asg.Services.ApplicationFramework.Application.Validators;
-using NewShore.Application.flights.Queries.Getflights;
 using NewShore.Application.Flights.Queries.GetFlightsWithReturn;
 using System.ComponentModel.DataAnnotations;
 
 namespace NewShore.Api.Models
 {
-    public class GetFlights : IMapTo<GetFlightQuery>
+    public class GetFlightsReturn : IMapTo<GetFlightReturnQuery>
     {
         [Required]
         [StringLength(DefaultValidations.Maxlength, MinimumLength = DefaultValidations.MinLength)]

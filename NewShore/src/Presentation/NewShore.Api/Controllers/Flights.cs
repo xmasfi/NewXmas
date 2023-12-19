@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NewShore.Api.Models;
 using NewShore.Application.flights.Queries.Getflights;
+using NewShore.Application.Flights.Queries.GetFlightsWithReturn;
 using NewShore.Domain.Entities;
 
 namespace NewShore.Api.Controllers
@@ -20,7 +21,7 @@ namespace NewShore.Api.Controllers
         }
 
         /// <summary>
-        ///     Get an flights 
+        ///     Get flights 
         /// </summary>
         /// <returns>Detail of an flights</returns>
         [HttpGet]
@@ -29,6 +30,18 @@ namespace NewShore.Api.Controllers
             var getflightQuery = _mapper.Map<GetFlightQuery>(getFlights);
 
             return Ok(await Mediator.Send(getflightQuery));            
+        }
+
+        /// <summary>
+        ///     Get  flights with return (if possible)
+        /// </summary>
+        /// <returns>Detail of flights</returns>
+        [HttpGet("GetWithReturn")]
+        public async Task<ActionResult<IList<Journey>>> GetWithReturn([FromQuery] GetFlightsReturn getFlights)
+        {
+            var getflightReturnQuery = _mapper.Map<GetFlightReturnQuery>(getFlights);
+
+            return Ok(await Mediator.Send(getflightReturnQuery));
         }
 
     }
